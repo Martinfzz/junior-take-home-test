@@ -1,3 +1,7 @@
+# Credits
+
+This test is forked from [Inato's take home test](https://github.com/inato/junior-take-home-test). Many thanks to them !
+
 # Context
 
 In this take-home test, you have to improve a web application made of 3 main components:
@@ -48,6 +52,7 @@ yarn insertData
 ```
 
 ### Export schema
+
 This command exports the GraphQL schema to a file named `schema.graphql`
 
 ```sh
@@ -63,6 +68,7 @@ yarn relay
 # Run in watch mode
 
 ## Using yarn
+
 This command launches both the API and the front-end, and will restart them when one file changes.
 This command also watches for changes in the graphQL schema and will export the new schema whenever it's needed.
 
@@ -71,6 +77,7 @@ yarn watch
 ```
 
 ## Using docker
+
 This command launches a docker container with the PostgreSQL table used by the API
 
 ```sh
@@ -89,6 +96,7 @@ docker-compose up -d app
 You will find below the documentation related to each tool/framework/language used in our tech stack.
 Please not that you **do not need to read all these docs before diving in the code**. Looking at existing code and occasionally
 confirm assumptions by looking at the documentation should be enough for this take home test.
+
 - Language: [TypeScript](https://www.typescriptlang.org/)
 - Database: [pg](https://www.postgresql.org/docs/)
 - SQL query builder: [knex](https://knexjs.org/)
