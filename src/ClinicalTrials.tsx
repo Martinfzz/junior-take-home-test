@@ -118,9 +118,14 @@ const ClinicalTrials: React.FC<Props> = ({
   
   const filteredList = useCallback(() => {
     if (countriesList.length === 0) {
-      setCountriesList(clinicalTrials.map(clinicalTrial => (
+      let list: any = [];
+
+      list = clinicalTrials.map(clinicalTrial => (
         clinicalTrial.country
-      )));
+      )).filter(function(item: any, pos: any, self: any) {
+        return self.indexOf(item) === pos;
+      })
+      setCountriesList(list);
     }
   }, [countriesList, setCountriesList, clinicalTrials]);
   
