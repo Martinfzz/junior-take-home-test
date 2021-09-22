@@ -37,9 +37,11 @@ export const schema = new GraphQLSchema({
           if (patientsSortDirection !== null) {
             baseQuery = baseQuery.orderBy("patients", patientsSortDirection);
           }
+          // Sort cities by alpahbetical order
           if (citiesSortDirection !== null) {
             baseQuery = baseQuery.orderBy("city", citiesSortDirection);
           }
+          // Filter countries by name
           if (countriesFilter !== "") {
             baseQuery = baseQuery.where("country", countriesFilter);
           }

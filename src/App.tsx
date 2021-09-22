@@ -47,7 +47,7 @@ const App: React.FC = () => {
             }
           }
         `}
-            variables={{patientsSortDirection, citiesSortDirection, countriesFilter, countriesList}}
+            variables={{patientsSortDirection, citiesSortDirection, countriesFilter}}
             render={({props}) => {
               if (!props) {
                 return;
