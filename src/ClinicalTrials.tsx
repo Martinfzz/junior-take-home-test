@@ -79,6 +79,11 @@ const ClinicalTrials: React.FC<Props> = ({
     }
   }, [patientsSortDirection, setPatientsSortDirection]);
 
+  const capitalizeWord = (word: string) => {
+    if (!word) return word;
+    return word[0].toUpperCase() + word.substr(1).toLowerCase();
+  }
+
   return (
     <Fragment>
       <h1>Clinical trials</h1>
@@ -86,18 +91,18 @@ const ClinicalTrials: React.FC<Props> = ({
         <Header>
           <HeaderCell>site</HeaderCell>
           <HeaderCell>country</HeaderCell>
+          <HeaderCell>city</HeaderCell>
           <ClickableHeaderCell onClick={togglePatientsSortDirection}>
             patients{sortDirectionIndicator(patientsSortDirection)}
           </ClickableHeaderCell>
-          <HeaderCell>city</HeaderCell>
         </Header>
         <Body>
           {clinicalTrials.map(clinicalTrial => (
             <Row key={clinicalTrial.site}>
               <Cell>{clinicalTrial.site}</Cell>
               <Cell>{clinicalTrial.country}</Cell>
+              <Cell>{capitalizeWord(clinicalTrial.city)}</Cell>
               <Cell>{clinicalTrial.patients}</Cell>
-              <Cell>{clinicalTrial.city}</Cell>
             </Row>
           ))}
         </Body>
