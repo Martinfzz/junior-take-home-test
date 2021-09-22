@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, { Fragment, useCallback } from "react";
 
 import { AppQueryResponse } from "./__generated__/AppQuery.graphql";
-import { PatientsSortDirection } from "./App";
+import { PatientsSortDirection, CitiesSortDirection } from "./App";
 
 const Table = styled.div`
   border-collapse: separate;
@@ -62,12 +62,18 @@ interface Props {
   setPatientsSortDirection: (
     patientsSortDirection: PatientsSortDirection
   ) => void;
+    citiesSortDirection: CitiesSortDirection;
+    setCitiesSortDirection: (
+      CitiesSortDirection: CitiesSortDirection
+  ) => void;
 }
 
 const ClinicalTrials: React.FC<Props> = ({
   clinicalTrials,
   patientsSortDirection,
-  setPatientsSortDirection
+  setPatientsSortDirection,
+  citiesSortDirection,
+  setCitiesSortDirection
 }: Props) => {
   const togglePatientsSortDirection = useCallback(() => {
     if (patientsSortDirection == null) {
@@ -78,6 +84,16 @@ const ClinicalTrials: React.FC<Props> = ({
       setPatientsSortDirection(null);
     }
   }, [patientsSortDirection, setPatientsSortDirection]);
+
+  const toggleCitiesSortDirection = useCallback(() => {
+    if (citiesSortDirection == null) {
+      setCitiesSortDirection("asc");
+    } else if (citiesSortDirection === "asc") {
+      setCitiesSortDirection("desc");
+    } else {
+      setCitiesSortDirection(null);
+    }
+  }, [citiesSortDirection, setCitiesSortDirection]);
 
   const capitalizeWord = (word: string) => {
     if (!word) return word;
@@ -91,7 +107,9 @@ const ClinicalTrials: React.FC<Props> = ({
         <Header>
           <HeaderCell>site</HeaderCell>
           <HeaderCell>country</HeaderCell>
-          <HeaderCell>city</HeaderCell>
+          <ClickableHeaderCell onClick={toggleCitiesSortDirection}>
+            city{sortCityDirectionIndicator(citiesSortDirection)}
+            </ClickableHeaderCell>
           <ClickableHeaderCell onClick={togglePatientsSortDirection}>
             patients{sortDirectionIndicator(patientsSortDirection)}
           </ClickableHeaderCell>
@@ -116,6 +134,14 @@ const sortDirectionIndicator = (
 ) => {
   if (patientsSortDirection === "asc") return "↑";
   if (patientsSortDirection === "desc") return "↓";
+  return "";
+};
+
+const sortCityDirectionIndicator = (
+  citiesSortDirection: CitiesSortDirection
+) => {
+  if (citiesSortDirection === "asc") return "↓A-Z";
+  if (citiesSortDirection === "desc") return "↑Z-A";
   return "";
 };
 

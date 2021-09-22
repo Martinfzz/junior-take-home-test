@@ -24,12 +24,18 @@ export const schema = new GraphQLSchema({
         args: {
           patientsSortDirection: {
             type: GraphQLString
+          },
+          citiesSortDirection: {
+            type: GraphQLString
           }
         },
-        resolve: (_, { patientsSortDirection }) => {
+        resolve: (_, { patientsSortDirection, citiesSortDirection }) => {
           let baseQuery = queryBuilder("clinical_trial");
           if (patientsSortDirection !== null) {
             baseQuery = baseQuery.orderBy("patients", patientsSortDirection);
+          }
+          if (citiesSortDirection !== null) {
+            baseQuery = baseQuery.orderBy("city", citiesSortDirection);
           }
           return baseQuery.select();
         }
