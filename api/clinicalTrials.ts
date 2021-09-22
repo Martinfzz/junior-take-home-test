@@ -16,6 +16,9 @@ export const ClinicalTrialType = new GraphQLObjectType({
     },
     patients: {
       type: GraphQLNonNull(GraphQLInt)
-    }
+    },
+    city: {
+      type: GraphQLNonNull(GraphQLString)
+    },
   }
 });
