@@ -97,6 +97,7 @@ const ClinicalTrials: React.FC<Props> = ({
     }
   }, [patientsSortDirection, setPatientsSortDirection]);
 
+  // Callback to sort cities by alphabetical order
   const toggleCitiesSortDirection = useCallback(() => {
     if (citiesSortDirection == null) {
       setCitiesSortDirection("asc");
@@ -107,15 +108,18 @@ const ClinicalTrials: React.FC<Props> = ({
     }
   }, [citiesSortDirection, setCitiesSortDirection]);
 
+  // Use to set the countries searched
   const toggleCountriesFilter = (e: any) => {
     setCountriesFilter(e.target.value);
   };
   
+  // Capitalize the city
   const capitalizeWord = (word: string) => {
     if (!word) return word;
     return word[0].toUpperCase() + word.substr(1).toLowerCase();
   }
   
+  // Callback to set and filter counties for selection
   const filteredList = useCallback(() => {
     if (countriesList.length === 0) {
       let list: any = [];
@@ -129,10 +133,10 @@ const ClinicalTrials: React.FC<Props> = ({
     }
   }, [countriesList, setCountriesList, clinicalTrials]);
   
+  // Call of the filtered country list
   useEffect(() => {
     filteredList();
   }, [filteredList])
-    
 
   return (
     <Fragment>
@@ -178,6 +182,7 @@ const sortDirectionIndicator = (
   return "";
 };
 
+// Display indicator for sorted cities
 const sortCityDirectionIndicator = (
   citiesSortDirection: CitiesSortDirection
 ) => {
