@@ -23,10 +23,14 @@ const Content = styled.div`
 
 export type PatientsSortDirection = 'asc' | 'desc' | null;
 export type CitiesSortDirection = 'asc' | 'desc' | null;
+export type CountriesFilter = string;
+export type CountriesList = string[];
 
 const App: React.FC = () => {
   const [patientsSortDirection, setPatientsSortDirection] = useState<PatientsSortDirection>(null);
   const [citiesSortDirection, setCitiesSortDirection] = useState<CitiesSortDirection>(null);
+  const [countriesFilter, setCountriesFilter] = useState<CountriesFilter>("");
+  const [countriesList, setCountriesList] = useState<CountriesList>([]);
 
     return (
       <Layout>
@@ -34,8 +38,8 @@ const App: React.FC = () => {
           <QueryRenderer<AppQuery>
             environment={environment}
             query={graphql`
-          query AppQuery($patientsSortDirection: String, $citiesSortDirection: String)  {
-            clinicalTrials(patientsSortDirection:$patientsSortDirection, citiesSortDirection:$citiesSortDirection) {
+          query AppQuery($patientsSortDirection: String, $citiesSortDirection: String, $countriesFilter: String)  {
+            clinicalTrials(patientsSortDirection:$patientsSortDirection, citiesSortDirection:$citiesSortDirection, countriesFilter:$countriesFilter) {
               country
               patients
               site
@@ -43,7 +47,7 @@ const App: React.FC = () => {
             }
           }
         `}
-            variables={{patientsSortDirection, citiesSortDirection}}
+            variables={{patientsSortDirection, citiesSortDirection, countriesFilter, countriesList}}
             render={({props}) => {
               if (!props) {
                 return;
@@ -52,6 +56,10 @@ const App: React.FC = () => {
                                      setPatientsSortDirection={setPatientsSortDirection}
                                      citiesSortDirection={citiesSortDirection}
                                      setCitiesSortDirection={setCitiesSortDirection}
+                                     countriesFilter={countriesFilter}
+                                     setCountriesFilter={setCountriesFilter}
+                                     countriesList={countriesList}
+                                     setCountriesList={setCountriesList}
                                      clinicalTrials={props.clinicalTrials}/>;
             }}
           />

@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import React, { Fragment, useCallback } from "react";
+import React, { Fragment, useCallback, useEffect } from "react";
 
 import { AppQueryResponse } from "./__generated__/AppQuery.graphql";
-import { PatientsSortDirection, CitiesSortDirection } from "./App";
+import { PatientsSortDirection, CitiesSortDirection, CountriesFilter, CountriesList } from "./App";
 
 const Table = styled.div`
   border-collapse: separate;
@@ -62,9 +62,17 @@ interface Props {
   setPatientsSortDirection: (
     patientsSortDirection: PatientsSortDirection
   ) => void;
-    citiesSortDirection: CitiesSortDirection;
-    setCitiesSortDirection: (
-      CitiesSortDirection: CitiesSortDirection
+  citiesSortDirection: CitiesSortDirection;
+  setCitiesSortDirection: (
+    CitiesSortDirection: CitiesSortDirection
+  ) => void;
+  countriesFilter: CountriesFilter;
+  setCountriesFilter: (
+    CountriesFilter: CountriesFilter
+  ) => void;
+  countriesList: CountriesList;
+  setCountriesList: (
+    CountriesList: CountriesList
   ) => void;
 }
 
@@ -73,7 +81,11 @@ const ClinicalTrials: React.FC<Props> = ({
   patientsSortDirection,
   setPatientsSortDirection,
   citiesSortDirection,
-  setCitiesSortDirection
+  setCitiesSortDirection,
+  countriesFilter,
+  setCountriesFilter,
+  countriesList,
+  setCountriesList
 }: Props) => {
   const togglePatientsSortDirection = useCallback(() => {
     if (patientsSortDirection == null) {
@@ -95,14 +107,43 @@ const ClinicalTrials: React.FC<Props> = ({
     }
   }, [citiesSortDirection, setCitiesSortDirection]);
 
+  const toggleCountriesFilter = (e: any) => {
+    setCountriesFilter(e.target.value);
+  };
+  
   const capitalizeWord = (word: string) => {
     if (!word) return word;
     return word[0].toUpperCase() + word.substr(1).toLowerCase();
   }
+  
+  const filteredList = useCallback(() => {
+    if (countriesList.length === 0) {
+      let list: any = [];
+
+      list = clinicalTrials.map(clinicalTrial => (
+        clinicalTrial.country
+      )).filter(function(item: any, pos: any, self: any) {
+        return self.indexOf(item) === pos;
+      })
+      setCountriesList(list);
+    }
+  }, [countriesList, setCountriesList, clinicalTrials]);
+  
+  useEffect(() => {
+    filteredList();
+  }, [filteredList])
+    
 
   return (
     <Fragment>
       <h1>Clinical trials</h1>
+      <select name="filterCountry" id="filter-country" onChange={toggleCountriesFilter}>
+        <option value="">--Please choose an option--</option>
+        <option value={[]}>All Countries</option>
+        {countriesList.map((element, index) => (
+            <option value={element} key={index}>{element}</option>
+          ))}
+      </select>
       <Table>
         <Header>
           <HeaderCell>site</HeaderCell>
