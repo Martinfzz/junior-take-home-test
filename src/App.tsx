@@ -36,6 +36,7 @@ const App: React.FC = () => {
               country
               patients
               site
+              city
             }
           }
         `}

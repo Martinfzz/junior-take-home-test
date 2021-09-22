@@ -89,6 +89,7 @@ const ClinicalTrials: React.FC<Props> = ({
           <ClickableHeaderCell onClick={togglePatientsSortDirection}>
             patients{sortDirectionIndicator(patientsSortDirection)}
           </ClickableHeaderCell>
+          <HeaderCell>city</HeaderCell>
         </Header>
         <Body>
           {clinicalTrials.map(clinicalTrial => (
@@ -96,6 +97,7 @@ const ClinicalTrials: React.FC<Props> = ({
               <Cell>{clinicalTrial.site}</Cell>
               <Cell>{clinicalTrial.country}</Cell>
               <Cell>{clinicalTrial.patients}</Cell>
+              <Cell>{clinicalTrial.city}</Cell>
             </Row>
           ))}
         </Body>
