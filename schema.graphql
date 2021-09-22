@@ -2,6 +2,7 @@ type ClinicalTrial {
   site: String!
   country: String!
   patients: Int!
+  city: String!
 }
 
 """An object with an ID"""
