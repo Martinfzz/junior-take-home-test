@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import React, { Fragment, useCallback } from "react";
+import React, { Fragment, useCallback, useEffect } from "react";
 
 import { AppQueryResponse } from "./__generated__/AppQuery.graphql";
-import { PatientsSortDirection } from "./App";
+import { PatientsSortDirection, CitiesSortDirection, CountriesFilter, CountriesList } from "./App";
 
 const Table = styled.div`
   border-collapse: separate;
@@ -62,12 +62,30 @@ interface Props {
   setPatientsSortDirection: (
     patientsSortDirection: PatientsSortDirection
   ) => void;
+  citiesSortDirection: CitiesSortDirection;
+  setCitiesSortDirection: (
+    CitiesSortDirection: CitiesSortDirection
+  ) => void;
+  countriesFilter: CountriesFilter;
+  setCountriesFilter: (
+    CountriesFilter: CountriesFilter
+  ) => void;
+  countriesList: CountriesList;
+  setCountriesList: (
+    CountriesList: CountriesList
+  ) => void;
 }
 
 const ClinicalTrials: React.FC<Props> = ({
   clinicalTrials,
   patientsSortDirection,
-  setPatientsSortDirection
+  setPatientsSortDirection,
+  citiesSortDirection,
+  setCitiesSortDirection,
+  countriesFilter,
+  setCountriesFilter,
+  countriesList,
+  setCountriesList
 }: Props) => {
   const togglePatientsSortDirection = useCallback(() => {
     if (patientsSortDirection == null) {
@@ -79,13 +97,60 @@ const ClinicalTrials: React.FC<Props> = ({
     }
   }, [patientsSortDirection, setPatientsSortDirection]);
 
+  const toggleCitiesSortDirection = useCallback(() => {
+    if (citiesSortDirection == null) {
+      setCitiesSortDirection("asc");
+    } else if (citiesSortDirection === "asc") {
+      setCitiesSortDirection("desc");
+    } else {
+      setCitiesSortDirection(null);
+    }
+  }, [citiesSortDirection, setCitiesSortDirection]);
+
+  const toggleCountriesFilter = (e: any) => {
+    setCountriesFilter(e.target.value);
+  };
+  
+  const capitalizeWord = (word: string) => {
+    if (!word) return word;
+    return word[0].toUpperCase() + word.substr(1).toLowerCase();
+  }
+  
+  const filteredList = useCallback(() => {
+    if (countriesList.length === 0) {
+      let list: any = [];
+
+      list = clinicalTrials.map(clinicalTrial => (
+        clinicalTrial.country
+      )).filter(function(item: any, pos: any, self: any) {
+        return self.indexOf(item) === pos;
+      })
+      setCountriesList(list);
+    }
+  }, [countriesList, setCountriesList, clinicalTrials]);
+  
+  useEffect(() => {
+    filteredList();
+  }, [filteredList])
+    
+
   return (
     <Fragment>
       <h1>Clinical trials</h1>
+      <select name="filterCountry" id="filter-country" onChange={toggleCountriesFilter}>
+        <option value="">--Please choose an option--</option>
+        <option value={[]}>All Countries</option>
+        {countriesList.map((element, index) => (
+            <option value={element} key={index}>{element}</option>
+          ))}
+      </select>
       <Table>
         <Header>
           <HeaderCell>site</HeaderCell>
           <HeaderCell>country</HeaderCell>
+          <ClickableHeaderCell onClick={toggleCitiesSortDirection}>
+            city{sortCityDirectionIndicator(citiesSortDirection)}
+            </ClickableHeaderCell>
           <ClickableHeaderCell onClick={togglePatientsSortDirection}>
             patients{sortDirectionIndicator(patientsSortDirection)}
           </ClickableHeaderCell>
@@ -95,6 +160,7 @@ const ClinicalTrials: React.FC<Props> = ({
             <Row key={clinicalTrial.site}>
               <Cell>{clinicalTrial.site}</Cell>
               <Cell>{clinicalTrial.country}</Cell>
+              <Cell>{capitalizeWord(clinicalTrial.city)}</Cell>
               <Cell>{clinicalTrial.patients}</Cell>
             </Row>
           ))}
@@ -109,6 +175,14 @@ const sortDirectionIndicator = (
 ) => {
   if (patientsSortDirection === "asc") return "↑";
   if (patientsSortDirection === "desc") return "↓";
+  return "";
+};
+
+const sortCityDirectionIndicator = (
+  citiesSortDirection: CitiesSortDirection
+) => {
+  if (citiesSortDirection === "asc") return "↓A-Z";
+  if (citiesSortDirection === "desc") return "↑Z-A";
   return "";
 };
 

@@ -2,6 +2,7 @@ type ClinicalTrial {
   site: String!
   country: String!
   patients: Int!
+  city: String!
 }
 
 """An object with an ID"""
@@ -16,5 +17,5 @@ type Query {
     """The ID of an object"""
     id: ID!
   ): Node
-  clinicalTrials(patientsSortDirection: String): [ClinicalTrial!]!
+  clinicalTrials(patientsSortDirection: String, citiesSortDirection: String, countriesFilter: String): [ClinicalTrial!]!
 }
